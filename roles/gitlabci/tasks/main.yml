@@ -27,4 +27,4 @@
     /usr/local/bin/gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
     /usr/local/bin/gitlab-runner start
 - name: "register Gitlab ci"
-  shell: " /usr/local/bin/gitlab-runner register  --non-interactive --executor shell --name linode_main --url https://gitlab.com/ --registration-token {{gitlab_ci_token}}"
+  shell: " /usr/local/bin/gitlab-runner register  --non-interactive --executor {{gitlab_ci_executer}} --name {{gitlab_ci_name}} --url  {{gitlab_ci_url}} --registration-token {{gitlab_ci_token}}"
