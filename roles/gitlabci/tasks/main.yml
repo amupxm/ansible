@@ -1,0 +1,30 @@
+- name: "Installs requirements"
+  dnf:
+    name:
+      - nginx
+      - nodejs
+      - npm
+      - git
+      - curl
+      - python3
+      - python3-pip
+    state: latest
+- name: "Download gitlabCi"
+  get_url:
+    url: https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+    dest: /usr/local/bin/gitlab-runner
+- name: "change privilages"
+  file:
+    path: /usr/local/bin/gitlab-runner
+    mode: "0777"
+- name: "add user to group"
+  ignore_errors: yes
+  shell: |
+    useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
+- name: "install Gitlab ci"
+  ignore_errors: yes
+  shell: |
+    /usr/local/bin/gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+    /usr/local/bin/gitlab-runner start
+- name: "register Gitlab ci"
+  shell: " /usr/local/bin/gitlab-runner register  --non-interactive --executor shell --name linode_main --url https://gitlab.com/ --registration-token {{gitlab_ci_token}}"
